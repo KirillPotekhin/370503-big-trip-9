@@ -39,4 +39,3 @@ render(day, createTripEventListTeamplate());
 const tripEventsList = day.querySelector('.trip-events__list');
 render(tripEventsList, createEventEditFormTeamplate());
 new Array(3).fill(``).forEach(() => render(tripEventsList, createEventCardTeamplate()));
-
