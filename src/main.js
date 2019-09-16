@@ -52,11 +52,14 @@ render(day, createDayInfoTeamplate());
 render(day, createTripEventListTeamplate());
 const tripEventsList = day.querySelector('.trip-events__list');
 
-render(tripEventsList, createEventEditFormTeamplate(eventList[0]));
- 
-for (let i = 1; i < EVENT_COUNT; i++) {
-  render(tripEventsList, createEventCardTeamplate(eventList[i]));
-}
+let renderItems = (dataList) => {
+  render(tripEventsList, createEventEditFormTeamplate(dataList[0]));
+  for (let i = 1; i < EVENT_COUNT; i++) {
+    render(tripEventsList, createEventCardTeamplate(dataList[i]));
+  }
+};
+
+renderItems(eventList);
 
 let event = document.querySelector(`.event`);
 let eventTypes = event.querySelectorAll(`.event__type-label`);
@@ -77,10 +80,7 @@ for (let tripSortBtn of tripSortBtns) {
     tripEventsList.innerHTML = ``;
     let tripSortBtnValue = tripSortBtn.innerText.toLowerCase();
     let tripSortMethod = (tripSortBtnValue == `event`) ? eventList : (tripSortBtnValue == `time`) ? eventList.slice().sort((a, b) => {return ((b.eventEndTime - b.eventStartTime) - (a.eventEndTime - a.eventStartTime))}) : eventList.slice().sort((a, b) => b.price - a.price); 
-    render(tripEventsList, createEventEditFormTeamplate(tripSortMethod[0]));
-    for (let i = 1; i < EVENT_COUNT; i++) {
-      render(tripEventsList, createEventCardTeamplate(tripSortMethod[i]));
-    }
+    renderItems(tripSortMethod);
   });
 }
 
