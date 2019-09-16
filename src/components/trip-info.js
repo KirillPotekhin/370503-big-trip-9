@@ -4,7 +4,14 @@ export const createTripInfoTeamplate = (eventList) => {
   let startPointDate = new Date(startPoint[0].eventStartTime).toLocaleDateString(`en-US`, {month: `short`, day: `numeric`});
   let finishPointDate = new Date(finishPoint[0].eventEndTime).toLocaleDateString(`en-US`, (new Date(startPoint[0].eventStartTime).getMonth()) === (new Date(finishPoint[0].eventEndTime).getMonth()) ? {day: `numeric`} : {month: `short`, day: `numeric`});
   let getTripInfoTitle = () => {
-    let title = (eventList.length === 3) ? `&mdash; ${startPoint[1].city} &mdash; ${startPoint[2].city}` : (eventList.length === 2) ? `&mdash; ${finishPoint[0].city}` : `&mdash; ... &mdash; ${finishPoint[0].city}`;
+    let title;
+    if (eventList.length === 3) {
+      title = `&mdash; ${startPoint[1].city} &mdash; ${startPoint[2].city}`;
+    } else if (eventList.length === 2) {
+      title = `&mdash; ${finishPoint[0].city}`;
+    } else {
+      title = `&mdash; ... &mdash; ${finishPoint[0].city}`;
+    }
     return (!eventList.length) ? `` : `${startPoint[0].city} ${title}`;
   };
   return `<div class="trip-info__main">

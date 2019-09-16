@@ -3,9 +3,19 @@ export const createEventCardTeamplate = ({type, city, eventStartTime, eventEndTi
   const HOUR = 60 * 60 * 1000;
   const MINUTE = 60 * 1000;
   let differenceTime = Math.floor(eventEndTime - eventStartTime);
-  let getDay = () => {Math.floor(differenceTime / DAY)};
+  let getDay = () => Math.floor(differenceTime / DAY);
   let getHour = () => (differenceTime < DAY) ? Math.floor(differenceTime / HOUR) : Math.floor(Math.floor(differenceTime % DAY) / HOUR);
-  let getMinute = () => (differenceTime < HOUR) ? differenceTime / MINUTE : (differenceTime < DAY) ? Math.floor(differenceTime % HOUR) / MINUTE : Math.floor(Math.floor(Math.floor(differenceTime % DAY) % HOUR) / MINUTE);
+  let getMinute = () => {
+    let minute;
+    if (differenceTime < HOUR) {
+      minute = differenceTime / MINUTE;
+    } else if (differenceTime < DAY) {
+      minute = Math.floor(differenceTime % HOUR) / MINUTE;
+    } else {
+      minute = Math.floor(Math.floor(Math.floor(differenceTime % DAY) % HOUR) / MINUTE);
+    }
+    return minute;
+  };
   let getDifferenceTime = () => {
     return `${getDay() ? `${getDay()}D ` : ``}${getHour() ? `${getHour()}H ` : ``}${getMinute() ? `${getMinute()}M` : ``}`;
   };
