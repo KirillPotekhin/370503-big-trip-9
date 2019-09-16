@@ -1,26 +1,13 @@
 export const createEventCardTeamplate = ({type, city, eventStartTime, eventEndTime, price, optionAll}) => {
-  // let startTime = new Date(eventStartTime);
-  // let endTime = new Date(eventEndTime);
+  const DAY = 24 * 60 * 60 * 1000;
+  const HOUR = 60 * 60 * 1000;
+  const MINUTE = 60 * 1000;
+  let differenceTime = Math.floor(eventEndTime - eventStartTime);
+  let getDay = () => {Math.floor(differenceTime / DAY)};
+  let getHour = () => (differenceTime < DAY) ? Math.floor(differenceTime / HOUR) : Math.floor(Math.floor(differenceTime % DAY) / HOUR);
+  let getMinute = () => (differenceTime < HOUR) ? differenceTime / MINUTE : (differenceTime < DAY) ? Math.floor(differenceTime % HOUR) / MINUTE : Math.floor(Math.floor(Math.floor(differenceTime % DAY) % HOUR) / MINUTE);
   let getDifferenceTime = () => {
-    if ((eventEndTime - eventStartTime) < (60 * 60 * 1000)) {
-      return `${Math.floor(eventEndTime - eventStartTime) / (60 * 1000)}M`;
-    } else if ((eventEndTime - eventStartTime) < 24 * 60 * 60 * 1000) {
-      if (Math.floor((eventEndTime - eventStartTime) % (60 * 60 * 1000)) / (60 * 1000) > 0) {
-        return `${Math.floor((eventEndTime - eventStartTime) / (60 * 60 * 1000))}H ${Math.floor((eventEndTime - eventStartTime) % (60 * 60 * 1000)) / (60 * 1000)}M`;
-      } else {
-        return `${Math.floor((eventEndTime - eventStartTime) / (60 * 60 * 1000))}H`;
-      }
-    } else {
-      if (Math.floor(Math.floor(Math.floor((eventEndTime - eventStartTime) % (24 * 60 * 60 * 1000)) % (60 * 60 * 1000)) / (60 * 1000)) > 0) {
-        return `${Math.floor((eventEndTime - eventStartTime) / (24 * 60 * 60 * 1000))}D ${Math.floor(Math.floor((eventEndTime - eventStartTime) % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000))}H ${Math.floor(Math.floor(Math.floor((eventEndTime - eventStartTime) % (24 * 60 * 60 * 1000)) % (60 * 60 * 1000)) / (60 * 1000))}M`;
-      } else {
-        if (Math.floor(Math.floor((eventEndTime - eventStartTime) % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000)) > 0) {
-          return `${Math.floor((eventEndTime - eventStartTime) / (24 * 60 * 60 * 1000))}D ${Math.floor(Math.floor((eventEndTime - eventStartTime) % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000))}H`;
-        } else {
-          return `${Math.floor((eventEndTime - eventStartTime) / (24 * 60 * 60 * 1000))}D`;
-        }
-      }
-    }
+    return `${getDay() ? `${getDay()}D ` : ``}${getHour() ? `${getHour()}H ` : ``}${getMinute() ? `${getMinute()}M` : ``}`;
   };
   return `<li class="trip-events__item">
       <div class="event">
