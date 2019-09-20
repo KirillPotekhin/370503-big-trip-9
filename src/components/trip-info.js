@@ -1,22 +1,60 @@
-export const createTripInfoTeamplate = (eventList) => {
-  let startPoint = eventList.slice().sort((a, b) => a.eventStartTime - b.eventStartTime);
-  let finishPoint = eventList.slice().sort((a, b) => b.eventEndTime - a.eventEndTime);
-  let startPointDate = new Date(startPoint[0].eventStartTime).toLocaleDateString(`en-US`, {month: `short`, day: `numeric`});
-  let finishPointDate = new Date(finishPoint[0].eventEndTime).toLocaleDateString(`en-US`, (new Date(startPoint[0].eventStartTime).getMonth()) === (new Date(finishPoint[0].eventEndTime).getMonth()) ? {day: `numeric`} : {month: `short`, day: `numeric`});
-  let getTripInfoTitle = () => {
-    let title;
-    if (eventList.length === 3) {
-      title = `&mdash; ${startPoint[1].city} &mdash; ${startPoint[2].city}`;
-    } else if (eventList.length === 2) {
-      title = `&mdash; ${finishPoint[0].city}`;
-    } else {
-      title = `&mdash; ... &mdash; ${finishPoint[0].city}`;
-    }
-    return (!eventList.length) ? `` : `${startPoint[0].city} ${title}`;
-  };
-  return `<div class="trip-info__main">
-    <h1 class="trip-info__title">${getTripInfoTitle()}</h1>
+import {RevisionNumberTitle} from '../variables.js';
 
-    <p class="trip-info__dates">${eventList.length ? `${startPointDate} &nbsp;&mdash;&nbsp;${finishPointDate}` : ``}</p>
+import {createElement} from '../utils.js';
+
+export default class TripInfo {
+  constructor(eventList) {
+    this._eventList = eventList;
+  }
+
+  getStartPoints() {
+    return this._eventList.slice().sort((a, b) => a.startTime - b.startTime);
+  }
+
+  getFinishPoints() {
+    return this._eventList.slice().sort((a, b) => b.endTime - a.endTime);
+  }
+
+  getStartDate() {
+    return new Date(this.getStartPoints()[0].startTime);
+  }
+
+  getEndDate() {
+    return new Date(this.getFinishPoints()[0].endTime);
+  }
+
+  getStartPointDate() {
+    return this.getStartDate().toLocaleDateString(`en-US`, {month: `short`, day: `numeric`});
+  }
+
+  getEndPointDate() {
+    return this.getEndDate().toLocaleDateString(`en-US`, this.getStartDate().getMonth() === this.getEndDate().getMonth() ? {day: `numeric`} : {month: `short`, day: `numeric`});
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  getTitle() {
+    let title;
+    if (this._eventList.length === RevisionNumberTitle.THREE) {
+      title = `&mdash; ${this.getStartPoints()[1].city} &mdash; ${this.getStartPoints()[2].city}`;
+    } else if (this._eventList.length === RevisionNumberTitle.TWO) {
+      title = `&mdash; ${this.getFinishPoints()[0].city}`;
+    } else {
+      title = `&mdash; ... &mdash; ${this.getFinishPoints()[0].city}`;
+    }
+    return (!this._eventList.length) ? `` : `${this.getStartPoints()[0].city} ${title}`;
+  }
+
+  getTemplate() {
+    return `<div class="trip-info__main">
+    <h1 class="trip-info__title">${this.getTitle()}</h1>
+
+    <p class="trip-info__dates">${this._eventList.length ? `${this.getStartPointDate()} &nbsp;&mdash;&nbsp;${this.getEndPointDate()}` : ``}</p>
   </div>`;
-};
+  }
+}
