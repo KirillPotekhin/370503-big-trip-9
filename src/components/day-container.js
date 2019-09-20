@@ -1,3 +1,14 @@
-export const createDayContainerTeamplate = () => {
-  return `<li class="trip-days__item  day"></li>`;
+import {Position, createElement, render, unrender} from '../utils.js';
+
+export default class DayContainer {
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  getTemplate() {
+    return `<li class="trip-days__item  day"></li>`;
+  }
 };
