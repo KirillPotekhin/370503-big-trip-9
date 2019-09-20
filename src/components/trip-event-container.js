@@ -1,4 +1,4 @@
-import {Position, createElement, render, unrender} from '../utils.js';
+import {createElement} from '../utils.js';
 
 export default class TripEventContainer {
   getElement() {
@@ -11,4 +11,4 @@ export default class TripEventContainer {
   getTemplate() {
     return `<ul class="trip-events__list"></ul>`;
   }
-};
+}

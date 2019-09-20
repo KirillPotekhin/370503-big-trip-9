@@ -1,9 +1,9 @@
-import {TimeValue, ArrivalPoint, SortingMethod, RevisionNumberTitle, EVENT_COUNT} from '../variables.js';
+import {TimeValue, ArrivalPoint} from '../variables.js';
 
-import {Position, createElement, render, unrender} from '../utils.js';
+import {createElement, unrender} from '../utils.js';
 
 export default class EventEdit {
-  constructor ({type, cities, city, photo, description, startTime, endTime, price, optionAll}) {
+  constructor({type, cities, city, photo, description, startTime, endTime, price, optionAll}) {
     this._type = type;
     this._cities = cities;
     this._city = city;
@@ -33,8 +33,9 @@ export default class EventEdit {
   }
 
   removeElement() {
-    unrender(this._element);    
-    return this._element = null;
+    unrender(this._element);
+    this._element = null;
+    return this._element;
   }
 
   getTemplate() {

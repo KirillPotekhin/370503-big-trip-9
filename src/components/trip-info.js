@@ -1,9 +1,9 @@
-import {TimeValue, ArrivalPoint, SortingMethod, RevisionNumberTitle} from '../variables.js';
+import {RevisionNumberTitle} from '../variables.js';
 
-import {Position, createElement, render, unrender} from '../utils.js';
+import {createElement} from '../utils.js';
 
 export default class TripInfo {
-  constructor (eventList) {
+  constructor(eventList) {
     this._eventList = eventList;
   }
 
@@ -20,7 +20,7 @@ export default class TripInfo {
   }
 
   getEndDate() {
-    return new Date(this.getFinishPoints()[0].endTime)
+    return new Date(this.getFinishPoints()[0].endTime);
   }
 
   getStartPointDate() {

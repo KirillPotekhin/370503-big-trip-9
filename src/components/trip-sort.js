@@ -1,4 +1,4 @@
-import {Position, createElement, render, unrender} from '../utils.js';
+import {createElement} from '../utils.js';
 
 export default class TripSort {
   getElement() {
@@ -40,4 +40,4 @@ export default class TripSort {
     <span class="trip-sort__item  trip-sort__item--offers">Offers</span>
   </form>`;
   }
-};
+}

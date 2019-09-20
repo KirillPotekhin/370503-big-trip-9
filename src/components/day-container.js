@@ -1,4 +1,4 @@
-import {Position, createElement, render, unrender} from '../utils.js';
+import {createElement} from '../utils.js';
 
 export default class DayContainer {
   getElement() {
@@ -11,4 +11,4 @@ export default class DayContainer {
   getTemplate() {
     return `<li class="trip-days__item  day"></li>`;
   }
-};
+}

@@ -1,9 +1,9 @@
-import {TimeValue, ArrivalPoint, SortingMethod, RevisionNumberTitle, EVENT_COUNT} from '../variables.js';
+import {TimeValue, ArrivalPoint} from '../variables.js';
 
-import {Position, createElement, render, unrender} from '../utils.js';
+import {createElement} from '../utils.js';
 
 export default class Event {
-  constructor ({type, city, startTime, endTime, price, optionAll}) {
+  constructor({type, city, startTime, endTime, price, optionAll}) {
     this._type = type;
     this._city = city;
     this._startTime = startTime;

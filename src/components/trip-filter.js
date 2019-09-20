@@ -1,4 +1,4 @@
-import {Position, createElement, render, unrender} from '../utils.js';
+import {createElement} from '../utils.js';
 
 export default class TripFilter {
   getElement() {
@@ -28,4 +28,4 @@ export default class TripFilter {
       <button class="visually-hidden" type="submit">Accept filter</button>
   </form>`;
   }
-};
+}

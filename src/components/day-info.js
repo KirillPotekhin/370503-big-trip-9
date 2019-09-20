@@ -1,4 +1,4 @@
-import {Position, createElement, render, unrender} from '../utils.js';
+import {createElement} from '../utils.js';
 
 export default class DayInfo {
   getElement() {
@@ -14,4 +14,4 @@ export default class DayInfo {
     <time class="day__date" datetime="2019-03-18">MAR 18</time>
   </div>`;
   }
-};
+}

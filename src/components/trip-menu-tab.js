@@ -1,4 +1,4 @@
-import {Position, createElement, render, unrender} from '../utils.js';
+import {createElement} from '../utils.js';
 
 export default class TripTabs {
   getElement() {
@@ -14,4 +14,4 @@ export default class TripTabs {
     <a class="trip-tabs__btn" href="#">Stats</a>
   </nav>`;
   }
-};
+}
