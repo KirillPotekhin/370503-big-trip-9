@@ -9,7 +9,7 @@ const createElement = (template) => {
   return newElement.firstChild;
 };
 
-const render = (container, element, place = `${Position.BEFOREEND}`) => {
+const render = (container, element, place = Position.BEFOREEND) => {
   switch (place) {
     case Position.AFTERBEGIN:
       container.prepend(element);
