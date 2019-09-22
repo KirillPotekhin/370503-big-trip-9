@@ -47,12 +47,12 @@ export default class TripInfo {
     } else {
       title = `&mdash; ... &mdash; ${this.getFinishPoints()[0].city}`;
     }
-    return (!this._eventList.length) ? `` : `${this.getStartPoints()[0].city} ${title}`;
+    return `${this.getStartPoints()[0].city} ${title}`;
   }
 
   getTemplate() {
     return `<div class="trip-info__main">
-    <h1 class="trip-info__title">${this.getTitle()}</h1>
+    <h1 class="trip-info__title">${this._eventList.length ? this.getTitle() : ``}</h1>
 
     <p class="trip-info__dates">${this._eventList.length ? `${this.getStartPointDate()} &nbsp;&mdash;&nbsp;${this.getEndPointDate()}` : ``}</p>
   </div>`;
