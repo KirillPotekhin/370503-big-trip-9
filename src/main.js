@@ -1,5 +1,7 @@
 import {getRoute} from './data.js';
 
+import AbstractComponent from './components/abstract-component.js';
+
 import TripTabs from './components/trip-menu-tab';
 
 import TripFilter from './components/trip-filter';
@@ -95,6 +97,7 @@ if (!eventList.length) {
     };
   
     eventCard.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+
       tripEventsList.replaceChild(eventEditCard.getElement(), eventCard.getElement());
       document.addEventListener(`keydown`, onKeyEscDown);
       getEventType();
