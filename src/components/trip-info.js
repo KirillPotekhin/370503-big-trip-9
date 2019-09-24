@@ -1,9 +1,10 @@
 import {RevisionNumberTitle} from '../variables.js';
 
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
-export default class TripInfo {
+export default class TripInfo extends AbstractComponent {
   constructor(eventList) {
+    super();
     this._eventList = eventList;
   }
 
@@ -31,13 +32,6 @@ export default class TripInfo {
     return this.getEndDate().toLocaleDateString(`en-US`, this.getStartDate().getMonth() === this.getEndDate().getMonth() ? {day: `numeric`} : {month: `short`, day: `numeric`});
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
   getTitle() {
     let title;
     if (this._eventList.length === RevisionNumberTitle.THREE) {
@@ -52,9 +46,9 @@ export default class TripInfo {
 
   getTemplate() {
     return `<div class="trip-info__main">
-    <h1 class="trip-info__title">${this._eventList.length ? this.getTitle() : ``}</h1>
+      <h1 class="trip-info__title">${this._eventList.length ? this.getTitle() : ``}</h1>
 
-    <p class="trip-info__dates">${this._eventList.length ? `${this.getStartPointDate()} &nbsp;&mdash;&nbsp;${this.getEndPointDate()}` : ``}</p>
-  </div>`;
+      <p class="trip-info__dates">${this._eventList.length ? `${this.getStartPointDate()} &nbsp;&mdash;&nbsp;${this.getEndPointDate()}` : ``}</p>
+    </div>`;
   }
 }

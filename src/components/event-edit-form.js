@@ -1,9 +1,10 @@
 import {TimeValue, ArrivalPoint} from '../variables.js';
 
-import {createElement, unrender} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
-export default class EventEdit {
+export default class EventEdit extends AbstractComponent {
   constructor({type, cities, city, photo, description, startTime, endTime, price, optionAll}) {
+    super();
     this._type = type;
     this._cities = cities;
     this._city = city;
@@ -23,19 +24,6 @@ export default class EventEdit {
     const hours = new Date(time).getHours();
     const minute = new Date(time).getMinutes();
     return `${hours < TimeValue.REVISION_TIME ? `0${hours}` : `${hours}`}:${minute < TimeValue.REVISION_TIME ? `0${minute}` : `${minute}`}`;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    unrender(this._element);
-    this._element = null;
-    return this._element;
   }
 
   getTemplate() {

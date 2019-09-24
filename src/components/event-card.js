@@ -1,9 +1,10 @@
 import {TimeValue, ArrivalPoint} from '../variables.js';
 
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
-export default class Event {
+export default class Event extends AbstractComponent {
   constructor({type, city, startTime, endTime, price, optionAll}) {
+    super();
     this._type = type;
     this._city = city;
     this._startTime = startTime;
@@ -35,13 +36,6 @@ export default class Event {
     const hours = new Date(time).getHours();
     const minute = new Date(time).getMinutes();
     return `${hours < TimeValue.REVISION_TIME ? `0${hours}` : `${hours}`}:${minute < TimeValue.REVISION_TIME ? `0${minute}` : `${minute}`}`;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
   }
 
   getTemplate() {
