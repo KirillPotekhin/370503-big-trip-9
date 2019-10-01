@@ -1,6 +1,6 @@
 import AbstractComponent from './abstract-component.js';
 
-export default class TripFilter extends AbstractComponent {
+export default class Filter extends AbstractComponent {
   getTemplate() {
     return `<form class="trip-filters" action="#" method="get">
       <div class="trip-filters__filter">

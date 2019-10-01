@@ -1,24 +1,24 @@
 import Message from '../components/message.js';
 
-import TripSort from '../components/trip-sort.js';
+import Sort from '../components/sort.js';
 
-import TripDayContainer from '../components/trip-days-container.js';
+import DaysContainer from '../components/days-container.js';
 
 import DayContainer from '../components/day-container.js';
 
 import DayInfo from '../components/day-info.js';
 
-import TripEventContainer from '../components/trip-event-container';
+import EventContainer from '../components/event-container.js';
 
 import EventEdit from '../components/event-edit-form.js';
 
 import Event from '../components/event-card.js';
 
-import TripTabs from '../components/trip-menu-tab';
+import Tab from '../components/tab.js';
 
-import TripFilter from '../components/trip-filter';
+import Filter from '../components/filter.js';
 
-import TripInfo from '../components/trip-info.js';
+import Info from '../components/info.js';
 
 import {Position, render} from '../utils.js';
 
@@ -29,44 +29,44 @@ export default class TripController {
     this._container = container;
     this._events = events;
     this._message = new Message();
-    this._tripSort = new TripSort();
-    this._tripDayContainer = new TripDayContainer();
+    this._sort = new Sort();
+    this._daysContainer = new DaysContainer();
     this._dayContainer = new DayContainer();
     this._dayInfo = new DayInfo();
-    this._tripEventContainer = new TripEventContainer();
+    this._EventContainer = new EventContainer();
     this._infoContainer = document.querySelector(`.trip-info`);
-    this._info = new TripInfo(this._events);
-    this._tabs = new TripTabs();
-    this._filter = new TripFilter();
+    this._info = new Info(this._events);
+    this._tab = new Tab();
+    this._filter = new Filter();
   }
 
   init() {
     render(this._infoContainer, this._info.getElement(), Position.AFTERBEGIN);
     this._getCost();
-    const tripControls = document.querySelector(`.trip-controls`);
-    render(tripControls, this._tabs.getElement(), Position.AFTERBEGIN);
-    render(tripControls, this._filter.getElement());
+    const controls = document.querySelector(`.trip-controls`);
+    render(controls, this._tab.getElement(), Position.AFTERBEGIN);
+    render(controls, this._filter.getElement());
 
     if (!this._events.length) {
       render(this._container, this._message.getElement(), Position.AFTERBEGIN);
     } else {
-      render(this._container, this._tripSort.getElement(), Position.AFTERBEGIN);
+      render(this._container, this._sort.getElement(), Position.AFTERBEGIN);
 
-      render(this._container, this._tripDayContainer.getElement());
-      this._tripDays = this._container.querySelector(`.trip-days`);
+      render(this._container, this._daysContainer.getElement());
+      this._days = this._container.querySelector(`.trip-days`);
 
-      render(this._tripDays, this._dayContainer.getElement());
-      this._day = this._tripDays.querySelector(`.day`);
+      render(this._days, this._dayContainer.getElement());
+      this._day = this._days.querySelector(`.day`);
 
       render(this._day, this._dayInfo.getElement());
-      render(this._day, this._tripEventContainer.getElement());
-      this._tripEventsList = this._day.querySelector(`.trip-events__list`);
+      render(this._day, this._EventContainer.getElement());
+      this._eventsList = this._day.querySelector(`.trip-events__list`);
 
       this._renderItems(this._events);
 
-      this._sort();
+      this._onSortBtnClick();
 
-      this._filter();
+      this._onFilterBtnClick();
     }
   }
 
@@ -76,18 +76,18 @@ export default class TripController {
 
     const onKeyEscDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
-        this._tripEventsList.replaceChild(eventCardComponent.getElement(), eventEditCardComponent.getElement());
+        this._eventsList.replaceChild(eventCardComponent.getElement(), eventEditCardComponent.getElement());
         document.removeEventListener(`keydown`, onKeyEscDown);
       }
     };
 
     const onCloseForm = () => {
-      this._tripEventsList.replaceChild(eventCardComponent.getElement(), eventEditCardComponent.getElement());
+      this._eventsList.replaceChild(eventCardComponent.getElement(), eventEditCardComponent.getElement());
       document.removeEventListener(`keydown`, onKeyEscDown);
     };
 
     eventCardComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
-      this._tripEventsList.replaceChild(eventEditCardComponent.getElement(), eventCardComponent.getElement());
+      this._eventsList.replaceChild(eventEditCardComponent.getElement(), eventCardComponent.getElement());
       document.addEventListener(`keydown`, onKeyEscDown);
       this._getEventType();
     });
@@ -113,20 +113,20 @@ export default class TripController {
       eventEditCardComponent.removeElement();
     });
 
-    render(this._tripEventsList, eventCardComponent.getElement());
+    render(this._eventsList, eventCardComponent.getElement());
   }
 
   _renderItems(events) {
     events.forEach((event) => this._renderEvent(event));
   }
 
-  _sort() {
+  _onSortBtnClick() {
     const tripSort = document.querySelector(`.trip-sort`);
     const tripSortBtns = tripSort.querySelectorAll(`.trip-sort__btn`);
 
     for (let tripSortBtn of tripSortBtns) {
       tripSortBtn.addEventListener(`click`, () => {
-        this._tripEventsList.innerHTML = ``;
+        this._eventsList.innerHTML = ``;
         const tripSortBtnValue = tripSortBtn.innerText;
         let tripSortMethod;
         switch (tripSortBtnValue) {
@@ -147,12 +147,12 @@ export default class TripController {
     }
   }
 
-  _filter() {
+  _onFilterBtnClick() {
     const tripFilter = document.querySelector(`.trip-filters`);
     const tripFilterBtns = tripFilter.querySelectorAll(`.trip-filters__filter-label`);
     for (let tripFilterBtn of tripFilterBtns) {
       tripFilterBtn.addEventListener(`click`, () => {
-        this._tripEventsList.innerHTML = ``;
+        this._eventsList.innerHTML = ``;
         const tripSortInput = document.querySelector(`.trip-sort__input`);
         tripSortInput.checked = true;
         const tripFilterBtnValue = tripFilterBtn.innerText;
