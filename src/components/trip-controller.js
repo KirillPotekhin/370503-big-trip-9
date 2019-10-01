@@ -64,9 +64,9 @@ export default class TripController {
 
       this._renderItems(this._events);
 
-      this._onSortLinkClick();
+      this._sort();
 
-      this._onFilterLinkClick();
+      this._filter();
     }
   }
 
@@ -120,7 +120,7 @@ export default class TripController {
     events.forEach((event) => this._renderEvent(event));
   }
 
-  _onSortLinkClick() {
+  _sort() {
     const tripSort = document.querySelector(`.trip-sort`);
     const tripSortBtns = tripSort.querySelectorAll(`.trip-sort__btn`);
 
@@ -147,7 +147,7 @@ export default class TripController {
     }
   }
 
-  _onFilterLinkClick() {
+  _filter() {
     const tripFilter = document.querySelector(`.trip-filters`);
     const tripFilterBtns = tripFilter.querySelectorAll(`.trip-filters__filter-label`);
     for (let tripFilterBtn of tripFilterBtns) {
