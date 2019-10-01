@@ -1,13 +1,6 @@
-import {createElement} from '../utils.js';
+import AbstractComponent from './abstract-component.js';
 
-export default class TripDayContainer {
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
+export default class TripDayContainer extends AbstractComponent {
   getTemplate() {
     return `<ul class="trip-days"></ul>`;
   }

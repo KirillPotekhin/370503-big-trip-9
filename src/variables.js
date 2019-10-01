@@ -17,6 +17,7 @@ const SortingMethod = {
   EVERYTHING: `EVERYTHING`,
   FUTURE: `FUTURE`,
   PAST: `PAST`,
+  PRICE: `PRICE`,
 };
 
 const RevisionNumberTitle = {
