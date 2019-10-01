@@ -18,6 +18,8 @@ import TripTabs from '../components/trip-menu-tab';
 
 import TripFilter from '../components/trip-filter';
 
+import TripInfo from '../components/trip-info.js';
+
 import {Position, render} from '../utils.js';
 
 import {ArrivalPoint, SortingMethod} from '../variables.js';
@@ -32,11 +34,15 @@ export default class TripController {
     this._dayContainer = new DayContainer();
     this._dayInfo = new DayInfo();
     this._tripEventContainer = new TripEventContainer();
+    this._infoContainer = document.querySelector(`.trip-info`);
+    this._info = new TripInfo(this._events);
     this._tabs = new TripTabs();
     this._filter = new TripFilter();
   }
 
   init() {
+    render(this._infoContainer, this._info.getElement(), Position.AFTERBEGIN);
+    this._getCost();
     const tripControls = document.querySelector(`.trip-controls`);
     render(tripControls, this._tabs.getElement(), Position.AFTERBEGIN);
     render(tripControls, this._filter.getElement());
@@ -179,5 +185,10 @@ export default class TripController {
         eventLabel.textContent = `${eventTypeValue} ${(eventTypeValue === ArrivalPoint.CHECK_IN || eventTypeValue === ArrivalPoint.RESTAURANT || eventTypeValue === ArrivalPoint.SIGHTSEEING) ? `in` : `to`}`;
       });
     }
+  }
+
+  _getCost() {
+    const infoCost = this._infoContainer.querySelector(`.trip-info__cost-value`);
+    infoCost.textContent = this._events.reduce((tripCost, point) => tripCost + point.price + point.optionAll.reduce((optionCost, additional) => additional.isOption ? optionCost + additional.price : optionCost, 0), 0);
   }
 }
