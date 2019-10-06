@@ -4,11 +4,7 @@ import Sort from '../components/sort.js';
 
 import DaysContainer from '../components/days-container.js';
 
-import DayContainer from '../components/day-container.js';
-
-import DayInfo from '../components/day-info.js';
-
-import EventContainer from '../components/event-container.js';
+import Day from '../components/day.js';
 
 import EventEdit from '../components/event-edit-form.js';
 
@@ -26,14 +22,13 @@ import {ArrivalPoint, SortingMethod} from '../variables.js';
 
 export default class TripController {
   constructor(container, events) {
+    this._dates = [];
+    this._routeDayList = [];
     this._container = container;
     this._events = events;
     this._message = new Message();
     this._sort = new Sort();
     this._daysContainer = new DaysContainer();
-    this._dayContainer = new DayContainer();
-    this._dayInfo = new DayInfo();
-    this._EventContainer = new EventContainer();
     this._infoContainer = document.querySelector(`.trip-info`);
     this._info = new Info(this._events);
     this._tab = new Tab();
@@ -54,40 +49,34 @@ export default class TripController {
 
       render(this._container, this._daysContainer.getElement());
       this._days = this._container.querySelector(`.trip-days`);
+      this._points = this._getRouteDayPoint(this._events);
 
-      render(this._days, this._dayContainer.getElement());
-      this._day = this._days.querySelector(`.day`);
-
-      render(this._day, this._dayInfo.getElement());
-      render(this._day, this._EventContainer.getElement());
-      this._eventsList = this._day.querySelector(`.trip-events__list`);
-
-      this._renderItems(this._events);
-
-      this._onSortBtnClick();
+      this._renderRouteDayPoint(this._getRouteDayPoint(this._events), true);
 
       this._onFilterBtnClick();
+
+      this._onSortBtnClick();
     }
   }
 
-  _renderEvent(event) {
+  _renderEvent(container, event) {
     const eventCardComponent = new Event(event);
     const eventEditCardComponent = new EventEdit(event);
 
     const onKeyEscDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
-        this._eventsList.replaceChild(eventCardComponent.getElement(), eventEditCardComponent.getElement());
+        container.replaceChild(eventCardComponent.getElement(), eventEditCardComponent.getElement());
         document.removeEventListener(`keydown`, onKeyEscDown);
       }
     };
 
     const onCloseForm = () => {
-      this._eventsList.replaceChild(eventCardComponent.getElement(), eventEditCardComponent.getElement());
+      container.replaceChild(eventCardComponent.getElement(), eventEditCardComponent.getElement());
       document.removeEventListener(`keydown`, onKeyEscDown);
     };
 
     eventCardComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
-      this._eventsList.replaceChild(eventEditCardComponent.getElement(), eventCardComponent.getElement());
+      container.replaceChild(eventEditCardComponent.getElement(), eventCardComponent.getElement());
       document.addEventListener(`keydown`, onKeyEscDown);
       this._getEventType();
     });
@@ -103,7 +92,7 @@ export default class TripController {
       });
     }
 
-    eventEditCardComponent.getElement().querySelector(`form`).addEventListener(`submit`, () => {
+    eventEditCardComponent.getElement().addEventListener(`submit`, () => {
       onCloseForm();
     });
 
@@ -113,37 +102,31 @@ export default class TripController {
       eventEditCardComponent.removeElement();
     });
 
-    render(this._eventsList, eventCardComponent.getElement());
+    render(container, eventCardComponent.getElement());
   }
 
   _renderItems(events) {
     events.forEach((event) => this._renderEvent(event));
   }
 
-  _onSortBtnClick() {
-    const tripSort = document.querySelector(`.trip-sort`);
-    const tripSortBtns = tripSort.querySelectorAll(`.trip-sort__btn`);
-
-    for (let tripSortBtn of tripSortBtns) {
-      tripSortBtn.addEventListener(`click`, () => {
-        this._eventsList.innerHTML = ``;
-        const tripSortBtnValue = tripSortBtn.innerText;
-        let tripSortMethod;
-        switch (tripSortBtnValue) {
-          case SortingMethod.EVENT:
-            tripSortMethod = this._events;
-            break;
-          case SortingMethod.TIME:
-            tripSortMethod = this._events.slice().sort((a, b) => {
-              return ((b.endTime - b.startTime) - (a.endTime - a.startTime));
-            });
-            break;
-          case SortingMethod.PRICE:
-            tripSortMethod = this._events.slice().sort((a, b) => b.price - a.price);
-            break;
-        }
-        this._renderItems(tripSortMethod);
-      });
+  _renderRouteDayPoint(method, decisionVariable = true) {
+    for (let i = 0; i < method.length; i++) {
+      render(this._days, new Day(method[i]).getElement());
+    }
+    this._eventsList = Array.from(document.querySelectorAll(`.trip-events__list`));
+    for (let j = 0; j < method.length; j++) {
+      this._daysCounter = Array.from(document.querySelectorAll(`.day__counter`));
+      this._dateCounter = document.querySelector(`.day__date`);
+      if (decisionVariable) {
+        this._daysCounter[j].textContent = j + 1;
+      } else {
+        this._daysCounter[j].textContent = ``;
+        this._dateCounter.textContent = ``;
+      }
+      this._eventItems = Array.from(this._eventsList[j].querySelectorAll(`.trip-events__item`));
+      for (let k = 0; k < this._eventItems.length; k++) {
+        this._renderEvent(this._eventItems[k], method[j][k]);
+      }
     }
   }
 
@@ -152,23 +135,68 @@ export default class TripController {
     const tripFilterBtns = tripFilter.querySelectorAll(`.trip-filters__filter-label`);
     for (let tripFilterBtn of tripFilterBtns) {
       tripFilterBtn.addEventListener(`click`, () => {
-        this._eventsList.innerHTML = ``;
+        this._days.innerHTML = ``;
         const tripSortInput = document.querySelector(`.trip-sort__input`);
         tripSortInput.checked = true;
         const tripFilterBtnValue = tripFilterBtn.innerText;
         let tripFilterMethod;
         switch (tripFilterBtnValue) {
           case SortingMethod.EVERYTHING:
-            tripFilterMethod = this._events;
+            this._toggle = true;
+            this._points = this._getRouteDayPoint(this._events);
             break;
           case SortingMethod.FUTURE:
+            this._toggle = true;
             tripFilterMethod = this._events.filter((it) => it.startTime > Date.now());
+            this._points = this._getRouteDayPoint(tripFilterMethod);
             break;
           case SortingMethod.PAST:
+            this._toggle = true;
             tripFilterMethod = this._events.filter((it) => it.endTime < Date.now());
+            this._points = this._getRouteDayPoint(tripFilterMethod);
             break;
         }
-        this._renderItems(tripFilterMethod);
+        this._renderRouteDayPoint(this._points, this._toggle);
+      });
+    }
+  }
+
+  _onSortBtnClick() {
+    const tripSort = document.querySelector(`.trip-sort`);
+    const tripSortBtns = tripSort.querySelectorAll(`.trip-sort__btn`);
+    for (let tripSortBtn of tripSortBtns) {
+      tripSortBtn.addEventListener(`click`, () => {
+        this._filterPoints = [];
+        for (let point of this._points) {
+          point.forEach((it) => this._filterPoints.push(it));
+        }
+        this._wrapperMethod = [];
+        this._days.innerHTML = ``;
+        const tripSortBtnValue = tripSortBtn.innerText;
+        let tripSortMethod;
+        switch (tripSortBtnValue) {
+          case SortingMethod.EVENT:
+            this._toggle = true;
+            this._wrapperMethod = (this._points);
+            break;
+          case SortingMethod.TIME:
+            this._toggle = false;
+            if (this._filterPoints.length) {
+              tripSortMethod = this._filterPoints.slice().sort((a, b) => {
+                return ((b.endTime - b.startTime) - (a.endTime - a.startTime));
+              });
+              this._wrapperMethod.push(tripSortMethod);
+            }
+            break;
+          case SortingMethod.PRICE:
+            this._toggle = false;
+            if (this._filterPoints.length) {
+              tripSortMethod = this._filterPoints.slice().sort((a, b) => b.price - a.price);
+              this._wrapperMethod.push(tripSortMethod);
+            }
+            break;
+        }
+        this._renderRouteDayPoint(this._wrapperMethod, this._toggle);
       });
     }
   }
@@ -190,5 +218,23 @@ export default class TripController {
   _getCost() {
     const infoCost = this._infoContainer.querySelector(`.trip-info__cost-value`);
     infoCost.textContent = this._events.reduce((tripCost, point) => tripCost + point.price + point.optionAll.reduce((optionCost, additional) => additional.isOption ? optionCost + additional.price : optionCost, 0), 0);
+  }
+
+  _getRouteDayList(data) {
+    this._dates = [];
+    data.forEach((it) => {
+      this._dates.push(Math.floor(Date.parse(new Date(it.startTime).toLocaleDateString(`en-US`))));
+    });
+    this._dates = Array.from(new Set([...this._dates])).sort((a, b) => a - b);
+    return this._dates;
+  }
+
+  _getRouteDayPoint(data) {
+    this._getRouteDayList(data);
+    this._routeDayList = [];
+    for (let i = 0; i < this._getRouteDayList(data).length; i++) {
+      this._routeDayList[i] = data.slice().filter((it) => Math.floor(Date.parse(new Date(it.startTime).toLocaleDateString(`en-US`))) === this._getRouteDayList(data)[i]);
+    }
+    return this._routeDayList;
   }
 }
