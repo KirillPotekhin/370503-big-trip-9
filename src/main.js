@@ -24,3 +24,4 @@ tripController.stat = `module7-task2`;
 tripController.serv = `module8-task1`;
 tripController.communication = `module8-task2`;
 tripController.visoutinternet = `module9-task1`;
+tripController.visoutinternetdone = `module9-task2`;
