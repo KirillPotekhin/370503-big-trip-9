@@ -103,7 +103,7 @@ export default class EventEdit extends AbstractComponent {
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._city}" list="destination-list-1">
           <datalist id="destination-list-1">
-            ${this._cities.map((it) => `<option value="${it}"></option>`)}
+            ${Array.from(this._cities).map((it) => (`<option value="${it}"></option>`))}
           </datalist>
         </div>
 

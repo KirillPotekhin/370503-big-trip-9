@@ -92,7 +92,18 @@ export default class TripController {
       });
     }
 
-    eventEditCardComponent.getElement().addEventListener(`submit`, () => {
+    eventEditCardComponent.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+      const formData = new FormData(eventEditCardComponent.getElement());
+      const entry = {
+        city: formData.get(`event-destination`),
+        startTime: new Date(formData.get(`event-start-time`)),
+        endTime: new Date(formData.get(`event-end-time`)),
+        price: formData.get(`event-price`),
+        type: formData.get(`event-type`),
+        optionAll: formData.getAll('switch-to-comfort-class'),
+      }
+      console.log(entry);
       onCloseForm();
     });
 
