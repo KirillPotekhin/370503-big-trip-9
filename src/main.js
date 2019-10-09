@@ -20,3 +20,4 @@ const tripController = new TripController(tripEvents, eventList);
 tripController.init();
 tripController.flatpickr = `value`;
 tripController.screen = `module7-task1`;
+tripController.stat = `module7-task2`;
