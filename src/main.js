@@ -19,3 +19,4 @@ const tripEvents = pageMain.querySelector(`.trip-events`);
 const tripController = new TripController(tripEvents, eventList);
 tripController.init();
 tripController.flatpickr = `value`;
+tripController.screen = `module7-task1`;
