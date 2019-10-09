@@ -18,3 +18,4 @@ const tripEvents = pageMain.querySelector(`.trip-events`);
 
 const tripController = new TripController(tripEvents, eventList);
 tripController.init();
+tripController.flatpickr = `value`;
