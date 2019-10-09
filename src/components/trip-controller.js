@@ -101,9 +101,9 @@ export default class TripController {
         endTime: new Date(formData.get(`event-end-time`)),
         price: formData.get(`event-price`),
         type: formData.get(`event-type`),
-        optionAll: formData.getAll('switch-to-comfort-class'),
-      }
-      console.log(entry);
+        optionAll: formData.getAll(`switch-to-comfort-class`),
+      };
+      this.entry = entry;
       onCloseForm();
     });
 
