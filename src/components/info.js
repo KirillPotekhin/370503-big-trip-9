@@ -2,7 +2,7 @@ import {RevisionNumberTitle} from '../variables.js';
 
 import AbstractComponent from './abstract-component.js';
 
-export default class TripInfo extends AbstractComponent {
+export default class Info extends AbstractComponent {
   constructor(eventList) {
     super();
     this._eventList = eventList;

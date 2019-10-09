@@ -7,9 +7,10 @@ import {TimeValue, ArrivalPoint, SortingMethod, RevisionNumberTitle, EVENT_COUNT
 const eventList = [];
 for (let i = 0; i < EVENT_COUNT; i++) {
   eventList[i] = getRoute();
-  eventList[i].city = eventList[i].cities[Math.floor(Math.random() * 6)];
-  eventList[i].startTime = eventList[i].getEventStartTime;
-  eventList[i].endTime = eventList[i].getEventEndTime;
+  // eventList[i].city = eventList[i].cities[Math.floor(Math.random() * 6)];
+  // eventList[i].startTime = eventList[i].getEventStartTime;
+  // eventList[i].endTime = eventList[i].getEventEndTime;
+  console.log(`начало`, new Date(eventList[i].startTime), `конец`, new Date(eventList[i].endTime));
 }
 
 const pageMain = document.querySelector(`.page-main`);
