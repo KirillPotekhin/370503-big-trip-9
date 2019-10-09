@@ -21,3 +21,4 @@ tripController.init();
 tripController.flatpickr = `value`;
 tripController.screen = `module7-task1`;
 tripController.stat = `module7-task2`;
+tripController.serv = `module8-task1`;
